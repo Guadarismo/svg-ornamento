@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG Ornamento - Placa Paramétrica</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>🖼 SVG Ornamento</h1>
+    <span class="subtitle">De un SVG a una placa con relieve o inlay paramétricos (2 colores)</span>
+  </header>
+
+  <main class="app-layout">
+    <section class="panel-left">
+      <div class="upload-box">
+        <strong>Origen del dibujo</strong>
+        <div id="uploadCurrent">cargando…</div>
+        <div id="dropZone">
+          Arrastra un SVG aquí o
+          <label for="fileInput" class="btn-sm">selecciónalo</label>
+        </div>
+        <input type="file" id="fileInput" accept=".svg,image/svg+xml" hidden>
+      </div>
+
+      <details class="params-drawer" open>
+        <summary>Parámetros</summary>
+        <div class="params-grid" id="paramsGrid"></div>
+      </details>
+
+      <div class="editor-section">
+        <div class="editor-toolbar">
+          <span>Código OpenSCAD</span>
+          <button class="btn btn-sm" id="resetCodeBtn" title="Restaurar la plantilla original">↩ Restaurar</button>
+        </div>
+        <div id="editorContainer"></div>
+      </div>
+    </section>
+
+    <section class="panel-right">
+      <div class="preview-section">
+        <div class="preview-tabs" id="previewTabs">
+          <button class="tab active" data-tab="svg">Vista Previa 2D</button>
+          <button class="tab" data-tab="3d">Visor 3D</button>
+        </div>
+        <div class="preview-content" id="previewContent">
+          <div class="tab-panel active" id="tabSvg">
+            <div class="svg-container" id="svgContainer">
+              <div class="placeholder">Genera la vista previa con el botón de abajo</div>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab3d">
+            <div class="viewer3d-container" id="viewer3dContainer">
+              <div class="placeholder">Genera el modelo 3D primero</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="previewBtn">🖼 Vista Previa</button>
+        <button class="btn btn-accent" id="generateBtn">⚡ Generar 3D</button>
+        <div class="download-group" id="downloadGroup" style="display:none">
+          <button class="btn btn-download" id="downloadStlBtn">📥 STL</button>
+          <button class="btn btn-download" id="download3mfBtn">📥 3MF (2 colores)</button>
+        </div>
+      </div>
+
+      <div class="status-bar" id="statusBar">Listo</div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

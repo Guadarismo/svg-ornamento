@@ -1,0 +1,16 @@
+{
+  "name": "svg-ornamento",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Herramienta paramétrica: convierte un archivo SVG en un modelo 3D imprimible (placa base con relieve o inlay).",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@hono/node-server": "^2.0.12",
+    "fflate": "^0.8.3",
+    "hono": "^4.6.0"
+  }
+}

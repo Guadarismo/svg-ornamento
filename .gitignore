@@ -1,0 +1,5 @@
+node_modules
+temp/
+salida-maqueta/
+batch-out/
+*.log
