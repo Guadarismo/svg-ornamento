@@ -124,7 +124,7 @@ Muy útil para "¿se ve igual que Illustrator?" sin depender de ojos:
 ## 10. Git / GitHub
 
 - Repo local inicializado en la carpeta del proyecto (commit inicial con este reporte).
-- Remoto subido por `gh repo create` (cuenta **Guadarismo**). URL: **INSERTAR_URL_REPO**
+- Remoto subido por `gh repo create` (cuenta **Guadarismo**). URL: **https://github.com/Guadarismo/svg-ornamento** (público, rama `main`).
 
 ## 11. Notas de entorno
 
