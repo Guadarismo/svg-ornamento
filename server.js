@@ -2,7 +2,7 @@ import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { writeFile, readFile, unlink, mkdir, copyFile } from 'fs/promises';
-import { execSync, exec } from 'child_process';
+import { execSync, exec, spawnSync } from 'child_process';
 import { unzipSync, zipSync, strFromU8, strToU8 } from 'fflate';
 import { randomUUID } from 'crypto';
 import { existsSync } from 'fs';
@@ -63,11 +63,16 @@ async function writeCurrentSvg(svg) {
 // ---------- OpenSCAD ----------
 function getOpenSCAD() {
   const candidates = [
+    process.env.OPENSCAD_PATH,
+    join(__dirname, 'portable', 'openscad', 'openscad.exe'),
+    join(__dirname, 'portable', 'openscad', 'openscad.com'),
+    join(__dirname, 'openscad', 'openscad.exe'),
     'C:\\Program Files\\OpenSCAD (Nightly)\\openscad.exe',
     'C:\\Program Files\\OpenSCAD\\openscad.exe',
     'openscad',
-  ];
+  ].filter(Boolean);
   for (const cmd of candidates) {
+    if ((cmd.includes('\\') || cmd.includes('/')) && !existsSync(cmd)) continue;
     try {
       execSync(`"${cmd}" --version`, { stdio: 'pipe' });
       return cmd;
@@ -76,13 +81,23 @@ function getOpenSCAD() {
   return 'C:\\Program Files\\OpenSCAD (Nightly)\\openscad.exe';
 }
 
+function supportsManifold(openscadBin) {
+  if (openscadBin.includes('(Nightly)')) return true;
+  try {
+    const r = spawnSync(openscadBin, ['--help'], { encoding: 'utf8', timeout: 5000 });
+    return /manifold/i.test(`${r.stdout || ''}\n${r.stderr || ''}`);
+  } catch {
+    return false;
+  }
+}
+
 const OPENSCAD = getOpenSCAD();
-const MANIFOLD_SUPPORTED = OPENSCAD.includes('(Nightly)');
+const MANIFOLD_SUPPORTED = supportsManifold(OPENSCAD);
 const FEATURES = MANIFOLD_SUPPORTED ? '--enable textmetrics' : '';
 
 // ---------- rutas ----------
 app.get('/template.scad', async (c) => {
-  const content = await fillTemplate(await readFile('template.scad', 'utf-8'));
+  const content = await fillTemplate(await readFile(join(__dirname, 'template.scad'), 'utf-8'));
   return c.newResponse(content, 200, { 'Content-Type': 'text/plain' });
 });
 
@@ -399,4 +414,5 @@ if (!existsSync(CURRENT_SVG) || meta.count === 0) {
 
 const port = parseInt(process.env.PORT || '3100');
 serve({ fetch: app.fetch, port });
+console.log(`🔧 OpenSCAD: ${OPENSCAD} (Manifold: ${MANIFOLD_SUPPORTED ? 'sí' : 'no'})`);
 console.log(`🚀 Servidor iniciado en http://localhost:${port}`);

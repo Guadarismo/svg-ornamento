@@ -12,7 +12,17 @@ npm install        # (ya hecho: hono, @hono/node-server, fflate)
 npm start          # o: node server.js  → http://localhost:3100
 ```
 
-Requiere **OpenSCAD** (usa primero `C:\Program Files\OpenSCAD (Nightly)\openscad.exe`).
+Requiere **OpenSCAD** (busca primero en `portable\openscad\openscad.exe`, luego en `C:\Program Files\OpenSCAD (Nightly)\openscad.exe`, o en `OPENSCAD_PATH`).
+
+### Modo 100% offline / pendrive
+
+- Todas las librerías del frontend (**CodeMirror 5.65.16** y **Three.js 0.170.0** con `OrbitControls` y `STLLoader`) están guardadas localmente en `public/vendor/`. La app no hace ninguna petición a internet.
+- Para llevarla en un pendrive a otra PC sin instalar Node ni OpenSCAD:
+  1. Copia la carpeta completa del proyecto (incluyendo `node_modules/` y `public/vendor/`).
+  2. Coloca los binarios portables (`.zip` oficial de Windows) dentro de `portable/`:
+     - `portable\node\node.exe`
+     - `portable\openscad\openscad.exe`
+  3. Ejecuta `run.cmd` (detecta automáticamente `portable\node\node.exe` y `server.js` detecta `portable\openscad\openscad.exe`).
 
 El puerto se puede cambiar con `PORT` (por defecto **3100**):
 
